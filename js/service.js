@@ -12,6 +12,8 @@ import AIBot from './AIBot.js'
 //     console.log(mes)
 // }))
 
+const htmlController = new HTMLController()
+
 const getAllMemos = () => {
     const repository = new Repository('memo')
     const memos = repository.getAll()
@@ -25,27 +27,15 @@ const getAllMemos = () => {
 
 
 const createMemolister = () => {
-    const btn = document.querySelector('#addMemo')
+    const btn = htmlController.findElement('#addMemo')
     btn.addEventListener('click', () => {
-        const title = document.querySelector("#memoTitle").value
-        const text = document.querySelector("#memoText").value
-        _nullValidation(title, "titleが空白です")
-        _nullValidation(text, "textが空白です")
-        const memoOjb = {title, text}
+        const memoOjb = _getInputData()
         if(btn.getAttribute('data-status') === 'new'){
-            const _memo = new Memo(memoOjb)
-            _memo.add()
-            _deleteInputValue()
+            _createMemo(memoOjb)
         } else if (btn.getAttribute('data-status') === 'update'){
             memoOjb.id = btn.getAttribute('data-id')
-            const _memo = new Memo(memoOjb)
-            _memo.update()
-            _deleteInputValue()
-            document.querySelector('#cancel').classList.add("hidden")
-            document.querySelector('#addMemo').innerHTML = "作成"
+            _updateMemo(memoOjb)
         }
-        const htmlController = new HTMLController()
-        htmlController.removeElementchildren("#memos")
         _reloadAllMemo()
         btn.setAttribute('data-status', 'new');
     }, false);
@@ -55,25 +45,11 @@ const editMemoLister = () => {
     const editBtns = document.querySelectorAll('.editBtn')
     editBtns.forEach(editBtn => {
         editBtn.addEventListener('click', (element) =>{
-            if(!element || !element.currentTarget.dataset || !element.currentTarget.dataset.memo) return
-            console.log(JSON.parse(element.currentTarget.dataset.memo))
-            const _memo = new Memo(JSON.parse(element.currentTarget.dataset.memo))
+            const _memo = _getTargetMemo(element)
             _memo.edit()
-            document.querySelector('#cancel').classList.remove("hidden")
-            document.querySelector('#addMemo').innerHTML = "更新"
+            _changeEditBtnStatus('edit')
         })
     });
-}
-
-
-const cancelLister = () =>{
-    const cancelBtn = document.querySelector('#cancel')
-    cancelBtn.addEventListener('click', () => {
-        cancelBtn.classList.add("hidden")
-        const btn = document.querySelector('#addMemo')
-        btn.setAttribute('data-status', 'new');
-        _deleteInputValue()
-    })
 }
 
 
@@ -81,15 +57,64 @@ const deleteLister = () => {
     const deleteBtns = document.querySelectorAll('.deleteBtn')
     deleteBtns.forEach(deleteBtn => {
         deleteBtn.addEventListener('click', (element) =>{
-            if(!element || !element.currentTarget.dataset || !element.currentTarget.dataset.memo) return
-            const _memo = new Memo(JSON.parse(element.currentTarget.dataset.memo))
+            const _memo = _getTargetMemo(element)
             _memo.delete()
-            const htmlController = new HTMLController()
-            htmlController.removeElementchildren("#memos")
             _reloadAllMemo()
         })
     });
 
+}
+
+
+const cancelLister = () =>{
+    const cancelBtn = document.querySelector('#cancel')
+    cancelBtn.addEventListener('click', () => {
+        cancelBtn.classList.add("hidden")
+        _changeEditBtnStatus('cancel')
+        _deleteInputValue()
+    })
+}
+
+
+//ここから内部で使用する関数
+const _createMemo = (memo) => {
+    const _memo = new Memo(memo)
+    _memo.add()
+    _deleteInputValue()
+}
+
+const _updateMemo = (memo) => {
+    const _memo = new Memo(memo)
+    _memo.update()
+    _deleteInputValue()
+    _changeEditBtnStatus('create')
+}
+
+const _changeEditBtnStatus = (status) => {
+    if(status === 'create'){
+        htmlController.findElement('#cancel').classList.add("hidden")
+        htmlController.findElement('#addMemo').innerHTML = "作成"
+    } else if (status === 'edit'){
+        htmlController.findElement('#cancel').classList.remove("hidden")
+        htmlController.findElement('#addMemo').innerHTML = "更新"
+    } else if (status === 'cancel'){
+        const btn = htmlController.findElement('#addMemo')
+        btn.setAttribute('data-status', 'new')
+    }
+}
+
+const _getTargetMemo = (element) => {
+    if(!element || !element.currentTarget.dataset || !element.currentTarget.dataset.memo) return
+    return new Memo(JSON.parse(element.currentTarget.dataset.memo))
+}
+
+
+const _getInputData = () => {
+    const title = htmlController.findElement("#memoTitle").value
+    const text = htmlController.findElement("#memoText").value
+    _nullValidation(title, "titleが空白です")
+    _nullValidation(text, "textが空白です")
+    return {title, text}
 }
 
 
@@ -101,12 +126,12 @@ const _nullValidation = (target, message) =>{
 }
 
 const _deleteInputValue = () => {
-    const htmlController = new HTMLController()
     htmlController.deleteElementValue('#memoTitle')
     htmlController.deleteElementValue('#memoText')
 }
 
 const _reloadAllMemo = () =>{
+    htmlController.removeElementchildren("#memos")
     getAllMemos()
     editMemoLister()
     deleteLister()

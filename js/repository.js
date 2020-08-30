@@ -4,14 +4,10 @@ export default class Repository {
     }
 
     store(data){
-        console.log('hogehogeo')
         let localStrageData = localStorage.getItem(this.key)
-        console.log('localStrageData')
-        console.log(localStrageData)
 
         //新規の場合
         if(!localStrageData) {
-            console.log('new')
             let saveData = []
             data.id = 1
             saveData.push(data)
@@ -29,20 +25,14 @@ export default class Repository {
     }
 
     update(data){
-        console.log('data')
-        console.log(data)
         let localStrageData = localStorage.getItem(this.key)
         localStrageData = [...JSON.parse(localStrageData)]
         localStrageData.forEach(localStorageData =>{
             if(localStorageData.id == data.id){
-                console.log('localStorageData')
-                console.log(localStorageData)
                 localStorageData.title = data.title
                 localStorageData.text = data.text
             }
         })
-        console.log('updateLocalStrageData')
-        console.log(localStrageData)
         localStorage.setItem(this.key, JSON.stringify(localStrageData))
     }
 
@@ -66,7 +56,6 @@ export default class Repository {
     getAll(){
         let localStrageData = localStorage.getItem(this.key)
         if(!localStrageData) return
-        console.log(JSON.parse(localStrageData))
         return JSON.parse(localStrageData)
     }
 }

@@ -30,8 +30,6 @@ export default class Memo {
 
     update(){
         const repository = new Repository('memo')
-        console.log('update')
-        console.log(this.data)
         repository.update(this.data)
     }
 
