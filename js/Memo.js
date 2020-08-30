@@ -51,8 +51,10 @@ export default class Memo {
                 + "<div class='text'>"
                 +  data.text
                 + "</div>"
+                + "<div class='memo__btn'>"
                 + `<div class='editBtn' data-memo=${JSON.stringify(data)}>編集</div>`
                 + `<div class='deleteBtn' data-memo=${JSON.stringify(data)}>削除</div>`
+                + "</div>"
                 + "</div>"
     }
 }

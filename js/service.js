@@ -41,6 +41,8 @@ const createMemolister = () => {
             const _memo = new Memo(memoOjb)
             _memo.update()
             _deleteInputValue()
+            document.querySelector('#cancel').classList.add("hidden")
+            document.querySelector('#addMemo').innerHTML = "作成"
         }
         const htmlController = new HTMLController()
         htmlController.removeElementchildren("#memos")
@@ -58,6 +60,7 @@ const editMemoLister = () => {
             const _memo = new Memo(JSON.parse(element.currentTarget.dataset.memo))
             _memo.edit()
             document.querySelector('#cancel').classList.remove("hidden")
+            document.querySelector('#addMemo').innerHTML = "更新"
         })
     });
 }
