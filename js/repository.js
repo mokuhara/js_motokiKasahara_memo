@@ -4,10 +4,9 @@ export default class Repository {
     }
 
     store(data){
-        let localStrageData = localStorage.getItem(this.key)
-
+        let localStrageData = JSON.parse(localStorage.getItem(this.key))
         //新規の場合
-        if(!localStrageData) {
+        if(localStrageData.length < 1) {
             let saveData = []
             data.id = 1
             saveData.push(data)
@@ -16,7 +15,6 @@ export default class Repository {
         }
 
         //追加の場合
-        localStrageData = JSON.parse(localStrageData)
         const id = +Math.max.apply(null, [...localStrageData].map((data) => { return data.id })) + 1
         data.id = id
         const upDatelocalStrageData = [...localStrageData, data]
