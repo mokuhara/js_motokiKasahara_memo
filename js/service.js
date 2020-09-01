@@ -30,6 +30,7 @@ const createMemolister = () => {
     const btn = htmlController.findElement('#addMemo')
     btn.addEventListener('click', () => {
         const memoOjb = _getInputData()
+        if(!memoOjb) return console.error('null error')
         if(btn.getAttribute('data-status') === 'new'){
             _createMemo(memoOjb)
         } else if (btn.getAttribute('data-status') === 'update'){
@@ -112,16 +113,17 @@ const _getTargetMemo = (element) => {
 const _getInputData = () => {
     const title = htmlController.findElement("#memoTitle").value
     const text = htmlController.findElement("#memoText").value
-    _nullValidation(title, "titleが空白です")
-    _nullValidation(text, "textが空白です")
+    const titleVal = _isNullValidation(title, "titleが空白です")
+    const textVal = _isNullValidation(text, "textが空白です")
+    if(titleVal || textVal) return null
     return {title, text}
 }
 
 
-const _nullValidation = (target, message) =>{
+const _isNullValidation = (target, message) =>{
     if(!target){
         alert(message)
-        return
+        return true
     }
 }
 

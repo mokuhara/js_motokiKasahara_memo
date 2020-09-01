@@ -4,9 +4,9 @@ export default class Repository {
     }
 
     store(data){
-        let localStrageData = JSON.parse(localStorage.getItem(this.key))
+        let localStrageData = JSON.parse(localStorage.getItem(this.key)) || []
         //新規の場合
-        if(localStrageData.length < 1) {
+        if(localStrageData && localStrageData.length < 1) {
             let saveData = []
             data.id = 1
             saveData.push(data)
