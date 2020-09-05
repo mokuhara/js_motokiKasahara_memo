@@ -181,6 +181,7 @@ const _replyBot = (text: string) => {
   if (!settingBtn) throw new Error("");
   settingBtn.innerText = "OFF";
   message.text.then((text: string) => {
+    if (!text) return;
     const _text = text.replace('"', "");
     const titleElement = <HTMLInputElement>(
       htmlController.findElement("#memoTitle")
@@ -195,6 +196,8 @@ const _replyBot = (text: string) => {
     const btnElement = <HTMLInputElement>htmlController.findElement("#addMemo");
     if (!btnElement) throw new Error("");
     btnElement.click();
+    titleElement.value = "";
+    textElement.value = "";
   });
 };
 

@@ -159,6 +159,8 @@ const _replyBot = (text) => {
         throw new Error("");
     settingBtn.innerText = "OFF";
     message.text.then((text) => {
+        if (!text)
+            return;
         const _text = text.replace('"', "");
         const titleElement = (htmlController.findElement("#memoTitle"));
         if (!titleElement)
@@ -172,6 +174,8 @@ const _replyBot = (text) => {
         if (!btnElement)
             throw new Error("");
         btnElement.click();
+        titleElement.value = "";
+        textElement.value = "";
     });
 };
 // 全削除
