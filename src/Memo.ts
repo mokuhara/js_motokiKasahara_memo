@@ -1,10 +1,21 @@
 import Repository from "./repository.js";
 import HTMLController from "./controlElement.js";
 
+interface requireCRUD {
+  id: string;
+  [prop: string]: string;
+}
+interface memoData extends requireCRUD {
+  id: string;
+  title: string;
+  text: string;
+}
+
 export default class Memo {
-  constructor(private data: { id: string; title: string; text: string }) {
-    this.data = data;
-  }
+  constructor(
+    private data: memoData,
+    private repository: Repository<memoData> = new Repository<memoData>("memo")
+  ) {}
 
   get() {
     const element = HTMLController.createElement(
@@ -15,8 +26,7 @@ export default class Memo {
   }
 
   add() {
-    const repository = new Repository("memo");
-    repository.store(this.data);
+    this.repository.store(this.data);
   }
 
   edit() {
@@ -37,13 +47,11 @@ export default class Memo {
   }
 
   update() {
-    const repository = new Repository("memo");
-    repository.update(this.data);
+    this.repository.update(this.data);
   }
 
   delete() {
-    const repository = new Repository("memo");
-    repository.delete(this.data.id);
+    this.repository.delete(this.data.id);
   }
 
   _createNewMemoHtml(data: { id: string; title: string; text: string }) {

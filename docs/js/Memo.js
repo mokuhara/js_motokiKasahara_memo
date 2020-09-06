@@ -1,17 +1,16 @@
 import Repository from "./repository.js";
 import HTMLController from "./controlElement.js";
 export default class Memo {
-    constructor(data) {
+    constructor(data, repository = new Repository("memo")) {
         this.data = data;
-        this.data = data;
+        this.repository = repository;
     }
     get() {
         const element = HTMLController.createElement("li", this._createNewMemoHtml(this.data));
         HTMLController.addElement("#memos", element);
     }
     add() {
-        const repository = new Repository("memo");
-        repository.store(this.data);
+        this.repository.store(this.data);
     }
     edit() {
         const titleElement = (HTMLController.findElement("#memoTitle"));
@@ -29,12 +28,10 @@ export default class Memo {
         submitElement.setAttribute("data-id", this.data.id);
     }
     update() {
-        const repository = new Repository("memo");
-        repository.update(this.data);
+        this.repository.update(this.data);
     }
     delete() {
-        const repository = new Repository("memo");
-        repository.delete(this.data.id);
+        this.repository.delete(this.data.id);
     }
     _createNewMemoHtml(data) {
         return (`<div class='memo' id='memo_${data.id}'>` +

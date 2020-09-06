@@ -4,7 +4,11 @@ import HTMLController from "./controlElement.js";
 
 import AIBot from "./aibot.js";
 
-interface memoData {
+interface requireCRUD {
+  id: string;
+  [prop: string]: string;
+}
+interface memoData extends requireCRUD {
   id: string;
   title: string;
   text: string;

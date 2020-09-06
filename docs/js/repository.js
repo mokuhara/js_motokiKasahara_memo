@@ -30,8 +30,9 @@ export default class Repository {
         const localStrageData = [...JSON.parse(localStorage.getItem(this.key))] || [];
         localStrageData.forEach((localStorageData) => {
             if (localStorageData.id == data.id) {
-                localStorageData.title = data.title;
-                localStorageData.text = data.text;
+                Object.keys(data).map((key) => {
+                    localStorageData[key] = data[key];
+                });
             }
         });
         localStorage.setItem(this.key, JSON.stringify(localStrageData));

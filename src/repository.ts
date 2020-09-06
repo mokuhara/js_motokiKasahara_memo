@@ -1,13 +1,12 @@
-interface memoData {
+interface requireCRUD {
   id: string;
-  title: string;
-  text: string;
+  [prop: string]: string;
 }
 
-export default class Repository {
+export default class Repository<T extends requireCRUD> {
   constructor(private key: string) {}
 
-  store(data: memoData) {
+  store(data: T) {
     const localStrageData = localStorage.getItem(this.key);
     //新規の場合
     if (!localStrageData || localStrageData.length <= 2) {
@@ -19,7 +18,7 @@ export default class Repository {
     }
 
     //追加の場合
-    const _localStrageData: memoData[] = [
+    const _localStrageData: T[] = [
       ...JSON.parse(localStorage.getItem(this.key)!),
     ];
     const ids = _localStrageData.map((data) => {
@@ -38,22 +37,23 @@ export default class Repository {
     return;
   }
 
-  update(data: memoData) {
-    const localStrageData: memoData[] =
+  update(data: T) {
+    const localStrageData: T[] =
       [...JSON.parse(localStorage.getItem(this.key)!)] || [];
-    localStrageData.forEach((localStorageData) => {
+    localStrageData.forEach((localStorageData: T) => {
       if (localStorageData.id == data.id) {
-        localStorageData.title = data.title;
-        localStorageData.text = data.text;
+        Object.keys(data).map((key: keyof T) => {
+          localStorageData[key] = data[key];
+        });
       }
     });
     localStorage.setItem(this.key, JSON.stringify(localStrageData));
   }
 
   delete(id: string) {
-    const localStrageData: memoData[] =
+    const localStrageData: T[] =
       [...JSON.parse(localStorage.getItem(this.key)!)] || [];
-    let _localStrageData: memoData[] = [];
+    let _localStrageData: T[] = [];
     localStrageData.forEach((localStorageData) => {
       if (localStorageData.id != id) {
         _localStrageData.push(localStorageData);
