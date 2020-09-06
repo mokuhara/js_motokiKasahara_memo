@@ -10,11 +10,9 @@ interface memoData {
   text: string;
 }
 
-const htmlController = new HTMLController();
-
 const getAllMemos = () => {
   const repository = new Repository("memo");
-  const memos: memoData[] = repository.getAll();
+  const memos: memoData[] = repository.getAll;
   if (memos) {
     memos.forEach((memo) => {
       const _memo = new Memo(memo);
@@ -24,7 +22,7 @@ const getAllMemos = () => {
 };
 
 const createMemolister = () => {
-  const btn = htmlController.findElement("#addMemo");
+  const btn = HTMLController.findElement("#addMemo");
   if (!btn) throw new Error("btnElement is not found");
   btn.addEventListener(
     "click",
@@ -75,7 +73,7 @@ const deleteLister = () => {
 };
 
 const cancelLister = () => {
-  const cancelBtn = <HTMLInputElement>htmlController.findElement("#cancel");
+  const cancelBtn = <HTMLInputElement>HTMLController.findElement("#cancel");
   if (!cancelBtn) throw new Error("cancel btn is not found");
   cancelBtn.addEventListener("click", () => {
     cancelBtn.classList.add("hidden");
@@ -86,7 +84,7 @@ const cancelLister = () => {
 
 const changeBotSettingListener = () => {
   const settingBtn = <HTMLInputElement>(
-    htmlController.findElement("#botsettingBtn")
+    HTMLController.findElement("#botsettingBtn")
   );
   if (!settingBtn) throw new Error("setting btn is not found");
   settingBtn.addEventListener("click", () => {
@@ -114,13 +112,13 @@ const _updateMemo = (memo: memoData) => {
 
 const _changeEditBtnStatus = (status: string) => {
   if (status === "create") {
-    htmlController.findElement("#cancel").classList.add("hidden");
-    htmlController.findElement("#addMemo").innerHTML = "作成";
+    HTMLController.findElement("#cancel").classList.add("hidden");
+    HTMLController.findElement("#addMemo").innerHTML = "作成";
   } else if (status === "edit") {
-    htmlController.findElement("#cancel").classList.remove("hidden");
-    htmlController.findElement("#addMemo").innerHTML = "更新";
+    HTMLController.findElement("#cancel").classList.remove("hidden");
+    HTMLController.findElement("#addMemo").innerHTML = "更新";
   } else if (status === "cancel") {
-    const btn = htmlController.findElement("#addMemo");
+    const btn = HTMLController.findElement("#addMemo");
     btn.setAttribute("data-status", "new");
   }
 };
@@ -133,9 +131,9 @@ const _getTargetMemo = (element: Event) => {
 
 const _getInputData = () => {
   const titleElenent = <HTMLInputElement>(
-    htmlController.findElement("#memoTitle")
+    HTMLController.findElement("#memoTitle")
   );
-  const textElement = <HTMLInputElement>htmlController.findElement("#memoText");
+  const textElement = <HTMLInputElement>HTMLController.findElement("#memoText");
   const title = _isNullValidation(titleElenent, "titleが空白です");
   const text = _isNullValidation(textElement, "textが空白です");
   if (!title || !text) return;
@@ -152,12 +150,12 @@ const _isNullValidation = (target: HTMLInputElement, message: string) => {
 };
 
 const _deleteInputValue = () => {
-  htmlController.deleteElementValue("#memoTitle");
-  htmlController.deleteElementValue("#memoText");
+  HTMLController.deleteElementValue("#memoTitle");
+  HTMLController.deleteElementValue("#memoText");
 };
 
 const _reloadAllMemo = () => {
-  htmlController.removeElementchildren("#memos");
+  HTMLController.removeElementchildren("#memos");
   getAllMemos();
   editMemoLister();
   deleteLister();
@@ -166,7 +164,7 @@ const _reloadAllMemo = () => {
 
 const _getBotSetting = () => {
   const settingBtn = <HTMLInputElement>(
-    htmlController.findElement("#botsettingBtn")
+    HTMLController.findElement("#botsettingBtn")
   );
   if (!settingBtn) throw new Error("");
   return settingBtn.innerText;
@@ -176,7 +174,7 @@ const _replyBot = (text: string) => {
   const aibot = new AIBot(text);
   const message = aibot.createAIBotReply()!;
   const settingBtn = <HTMLInputElement>(
-    htmlController.findElement("#botsettingBtn")
+    HTMLController.findElement("#botsettingBtn")
   );
   if (!settingBtn) throw new Error("");
   settingBtn.innerText = "OFF";
@@ -184,16 +182,16 @@ const _replyBot = (text: string) => {
     if (!text) return;
     const _text = text.replace('"', "");
     const titleElement = <HTMLInputElement>(
-      htmlController.findElement("#memoTitle")
+      HTMLController.findElement("#memoTitle")
     );
     if (!titleElement) throw new Error("");
     titleElement.value = message.title;
     const textElement = <HTMLInputElement>(
-      htmlController.findElement("#memoText")
+      HTMLController.findElement("#memoText")
     );
     if (!textElement) throw new Error("");
     textElement.value = _text;
-    const btnElement = <HTMLInputElement>htmlController.findElement("#addMemo");
+    const btnElement = <HTMLInputElement>HTMLController.findElement("#addMemo");
     if (!btnElement) throw new Error("");
     btnElement.click();
     titleElement.value = "";

@@ -2,10 +2,9 @@ import Memo from "./Memo.js";
 import Repository from "./repository.js";
 import HTMLController from "./controlElement.js";
 import AIBot from "./aibot.js";
-const htmlController = new HTMLController();
 const getAllMemos = () => {
     const repository = new Repository("memo");
-    const memos = repository.getAll();
+    const memos = repository.getAll;
     if (memos) {
         memos.forEach((memo) => {
             const _memo = new Memo(memo);
@@ -14,7 +13,7 @@ const getAllMemos = () => {
     }
 };
 const createMemolister = () => {
-    const btn = htmlController.findElement("#addMemo");
+    const btn = HTMLController.findElement("#addMemo");
     if (!btn)
         throw new Error("btnElement is not found");
     btn.addEventListener("click", () => {
@@ -63,7 +62,7 @@ const deleteLister = () => {
     });
 };
 const cancelLister = () => {
-    const cancelBtn = htmlController.findElement("#cancel");
+    const cancelBtn = HTMLController.findElement("#cancel");
     if (!cancelBtn)
         throw new Error("cancel btn is not found");
     cancelBtn.addEventListener("click", () => {
@@ -73,7 +72,7 @@ const cancelLister = () => {
     });
 };
 const changeBotSettingListener = () => {
-    const settingBtn = (htmlController.findElement("#botsettingBtn"));
+    const settingBtn = (HTMLController.findElement("#botsettingBtn"));
     if (!settingBtn)
         throw new Error("setting btn is not found");
     settingBtn.addEventListener("click", () => {
@@ -99,15 +98,15 @@ const _updateMemo = (memo) => {
 };
 const _changeEditBtnStatus = (status) => {
     if (status === "create") {
-        htmlController.findElement("#cancel").classList.add("hidden");
-        htmlController.findElement("#addMemo").innerHTML = "作成";
+        HTMLController.findElement("#cancel").classList.add("hidden");
+        HTMLController.findElement("#addMemo").innerHTML = "作成";
     }
     else if (status === "edit") {
-        htmlController.findElement("#cancel").classList.remove("hidden");
-        htmlController.findElement("#addMemo").innerHTML = "更新";
+        HTMLController.findElement("#cancel").classList.remove("hidden");
+        HTMLController.findElement("#addMemo").innerHTML = "更新";
     }
     else if (status === "cancel") {
-        const btn = htmlController.findElement("#addMemo");
+        const btn = HTMLController.findElement("#addMemo");
         btn.setAttribute("data-status", "new");
     }
 };
@@ -118,8 +117,8 @@ const _getTargetMemo = (element) => {
     return new Memo(JSON.parse(_element.dataset.memo));
 };
 const _getInputData = () => {
-    const titleElenent = (htmlController.findElement("#memoTitle"));
-    const textElement = htmlController.findElement("#memoText");
+    const titleElenent = (HTMLController.findElement("#memoTitle"));
+    const textElement = HTMLController.findElement("#memoText");
     const title = _isNullValidation(titleElenent, "titleが空白です");
     const text = _isNullValidation(textElement, "textが空白です");
     if (!title || !text)
@@ -135,18 +134,18 @@ const _isNullValidation = (target, message) => {
     return target.value;
 };
 const _deleteInputValue = () => {
-    htmlController.deleteElementValue("#memoTitle");
-    htmlController.deleteElementValue("#memoText");
+    HTMLController.deleteElementValue("#memoTitle");
+    HTMLController.deleteElementValue("#memoText");
 };
 const _reloadAllMemo = () => {
-    htmlController.removeElementchildren("#memos");
+    HTMLController.removeElementchildren("#memos");
     getAllMemos();
     editMemoLister();
     deleteLister();
     cancelLister();
 };
 const _getBotSetting = () => {
-    const settingBtn = (htmlController.findElement("#botsettingBtn"));
+    const settingBtn = (HTMLController.findElement("#botsettingBtn"));
     if (!settingBtn)
         throw new Error("");
     return settingBtn.innerText;
@@ -154,7 +153,7 @@ const _getBotSetting = () => {
 const _replyBot = (text) => {
     const aibot = new AIBot(text);
     const message = aibot.createAIBotReply();
-    const settingBtn = (htmlController.findElement("#botsettingBtn"));
+    const settingBtn = (HTMLController.findElement("#botsettingBtn"));
     if (!settingBtn)
         throw new Error("");
     settingBtn.innerText = "OFF";
@@ -162,15 +161,15 @@ const _replyBot = (text) => {
         if (!text)
             return;
         const _text = text.replace('"', "");
-        const titleElement = (htmlController.findElement("#memoTitle"));
+        const titleElement = (HTMLController.findElement("#memoTitle"));
         if (!titleElement)
             throw new Error("");
         titleElement.value = message.title;
-        const textElement = (htmlController.findElement("#memoText"));
+        const textElement = (HTMLController.findElement("#memoText"));
         if (!textElement)
             throw new Error("");
         textElement.value = _text;
-        const btnElement = htmlController.findElement("#addMemo");
+        const btnElement = HTMLController.findElement("#addMemo");
         if (!btnElement)
             throw new Error("");
         btnElement.click();

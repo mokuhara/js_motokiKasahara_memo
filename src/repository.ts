@@ -67,8 +67,8 @@ export default class Repository {
     // localStorage.removeItem(this.key)
   }
 
-  getAll() {
-    let localStrageData = localStorage.getItem(this.key);
+  get getAll() {
+    const localStrageData = localStorage.getItem(this.key);
     if (!localStrageData) return;
     return JSON.parse(localStrageData);
   }

@@ -7,12 +7,11 @@ export default class Memo {
   }
 
   get() {
-    const htmlController = new HTMLController();
-    const element = htmlController.createElement(
+    const element = HTMLController.createElement(
       "li",
       this._createNewMemoHtml(this.data)
     );
-    htmlController.addElement("#memos", element);
+    HTMLController.addElement("#memos", element);
   }
 
   add() {
@@ -21,18 +20,17 @@ export default class Memo {
   }
 
   edit() {
-    const htmlController = new HTMLController();
     const titleElement = <HTMLInputElement>(
-      htmlController.findElement("#memoTitle")
+      HTMLController.findElement("#memoTitle")
     );
     if (!titleElement) throw new Error("");
     titleElement.value = this.data.title;
     const textElement = <HTMLInputElement>(
-      htmlController.findElement("#memoText")
+      HTMLController.findElement("#memoText")
     );
     if (!textElement) throw new Error("");
     textElement.value = this.data.text;
-    const submitElement = htmlController.findElement("#addMemo");
+    const submitElement = HTMLController.findElement("#addMemo");
     if (!submitElement) throw new Error("");
     submitElement.setAttribute("data-status", "update");
     submitElement.setAttribute("data-id", this.data.id);

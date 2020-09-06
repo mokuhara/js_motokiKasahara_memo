@@ -6,25 +6,23 @@ export default class Memo {
         this.data = data;
     }
     get() {
-        const htmlController = new HTMLController();
-        const element = htmlController.createElement("li", this._createNewMemoHtml(this.data));
-        htmlController.addElement("#memos", element);
+        const element = HTMLController.createElement("li", this._createNewMemoHtml(this.data));
+        HTMLController.addElement("#memos", element);
     }
     add() {
         const repository = new Repository("memo");
         repository.store(this.data);
     }
     edit() {
-        const htmlController = new HTMLController();
-        const titleElement = (htmlController.findElement("#memoTitle"));
+        const titleElement = (HTMLController.findElement("#memoTitle"));
         if (!titleElement)
             throw new Error("");
         titleElement.value = this.data.title;
-        const textElement = (htmlController.findElement("#memoText"));
+        const textElement = (HTMLController.findElement("#memoText"));
         if (!textElement)
             throw new Error("");
         textElement.value = this.data.text;
-        const submitElement = htmlController.findElement("#addMemo");
+        const submitElement = HTMLController.findElement("#addMemo");
         if (!submitElement)
             throw new Error("");
         submitElement.setAttribute("data-status", "update");
